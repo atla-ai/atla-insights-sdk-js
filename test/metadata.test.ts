@@ -456,7 +456,9 @@ describe("metadata", () => {
 			const contextMeta1 = { context: "first" };
 			const contextMeta2 = { context: "second" };
 
+			// biome-ignore lint/correctness/noUnusedVariables: Allow unused variables
 			let firstResult: any;
+			// biome-ignore lint/correctness/noUnusedVariables: Allow unused variables
 			let secondResult: any;
 
 			withMetadata(contextMeta1, () => {

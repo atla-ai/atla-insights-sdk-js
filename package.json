@@ -11,7 +11,9 @@
 		"test": "jest",
 		"prepare": "husky",
 		"lint": "biome lint .",
-		"format": "biome format --write ."
+		"format": "biome format --write .",
+		"build": "tsc --project tsconfig.build.json",
+		"prepublishOnly": "pnpm run build"
 	},
 	"keywords": [],
 	"author": "",
@@ -27,7 +29,8 @@
 		"@opentelemetry/resources": "^2.0.1",
 		"@opentelemetry/sdk-node": "^0.53.0",
 		"@opentelemetry/sdk-trace-node": "^1.25.1",
-		"@opentelemetry/semantic-conventions": "^1.36.0"
+		"@opentelemetry/semantic-conventions": "^1.36.0",
+		"ts-node": "^10.9.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.4",

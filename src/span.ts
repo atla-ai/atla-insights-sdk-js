@@ -1,4 +1,4 @@
-import { Span, SpanKind } from "@opentelemetry/api";
+import { type Span, SpanKind } from "@opentelemetry/api";
 import type {
 	ChatCompletionMessageParam,
 	ChatCompletionAssistantMessageParam,

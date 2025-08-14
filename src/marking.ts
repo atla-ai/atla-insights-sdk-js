@@ -9,14 +9,16 @@ import { getAtlaContext } from "./context";
  * Mark the root span with a value.
  */
 function markRootSpan(value: 0 | 1): void {
-    const context = getAtlaContext();
-    const rootSpan = context?.rootSpan;
+	const context = getAtlaContext();
+	const rootSpan = context?.rootSpan;
 
-    if (!rootSpan) {
-        throw new Error("Atla marking can only be done within an instrumented function.");
-    }
+	if (!rootSpan) {
+		throw new Error(
+			"Atla marking can only be done within an instrumented function.",
+		);
+	}
 
-    rootSpan.setAttribute(SUCCESS_MARK, value);
+	rootSpan.setAttribute(SUCCESS_MARK, value);
 }
 
 /**
@@ -36,7 +38,7 @@ function markRootSpan(value: 0 | 1): void {
  * ```
  */
 export function markSuccess(): void {
-    markRootSpan(1);
+	markRootSpan(1);
 }
 
 /**
@@ -56,5 +58,5 @@ export function markSuccess(): void {
  * ```
  */
 export function markFailure(): void {
-    markRootSpan(0);
+	markRootSpan(0);
 }

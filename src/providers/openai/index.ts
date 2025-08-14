@@ -7,7 +7,6 @@ const SERVICE_NAME = "openai";
 
 let openAIInstrumentation: OpenAIInstrumentation | null = null;
 
-
 /**
  * Instrument the OpenAI LLM provider.
  *
@@ -58,6 +57,8 @@ let openAIInstrumentation: OpenAIInstrumentation | null = null;
  *
  * @returns void
  */
+
+// biome-ignore lint/suspicious/noExplicitAny: Allow any
 export function instrumentOpenAI(openaiModule?: any): void {
 	const context = getAtlaContext();
 	if (context?.suppressInstrumentation) {

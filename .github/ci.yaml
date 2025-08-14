@@ -25,7 +25,10 @@ jobs:
               run: pnpm install
 
             - name: Lint with Biome
-              run: pnpm lint-staged --allow-empty
+              run: pnpm lint
+
+            - name: Format with Biome
+              run: pnpm format
 
             - name: Run tests
               run: pnpm test

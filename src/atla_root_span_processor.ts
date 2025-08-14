@@ -3,19 +3,21 @@ import type {
 	Span,
 	SpanProcessor,
 } from "@opentelemetry/sdk-trace-base";
-import { Context } from "@opentelemetry/api";
+import type { Context } from "@opentelemetry/api";
 import { METADATA_MARK, SUCCESS_MARK } from "./internal/constants";
 
 export class AtlaRootSpanProcessor implements SpanProcessor {
 	constructor(private metadata?: Record<string, string>) {}
 
-	onStart(span: Span, parentContext: Context): void {
+	onStart(span: Span, _: Context): void {
 		const instrumentationScope = span.instrumentationLibrary.name;
-		if (instrumentationScope === "@arizeai/openinference-instrumentation-openai") {
-			Object.defineProperty(span.instrumentationLibrary, 'name', {
+		if (
+			instrumentationScope === "@arizeai/openinference-instrumentation-openai"
+		) {
+			Object.defineProperty(span.instrumentationLibrary, "name", {
 				value: "openinference.instrumentation.openai",
 				writable: false,
-				configurable: true
+				configurable: true,
 			});
 		}
 
@@ -31,7 +33,7 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 		}
 	}
 
-	onEnd(span: ReadableSpan): void {
+	onEnd(_: ReadableSpan): void {
 		// No processing needed on end
 	}
 

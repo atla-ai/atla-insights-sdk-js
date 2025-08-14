@@ -6,7 +6,11 @@
  * It provides functions to get, set, and run code within enhanced contexts that
  * carry Atla-specific state alongside standard trace data.
  */
-import { context as otelContext, Context, Span } from "@opentelemetry/api";
+import {
+	context as otelContext,
+	type Context,
+	type Span,
+} from "@opentelemetry/api";
 
 interface AtlaContext {
 	rootSpan?: Span;

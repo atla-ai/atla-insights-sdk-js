@@ -9,6 +9,14 @@
 		"enabled": true,
 		"indentStyle": "tab"
 	},
+	"files": {
+		"includes": [
+			"src/**/*",
+			"test/**/*",
+			"!dist/**/*",
+			"!node_modules/**/*"
+		]
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {

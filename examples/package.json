@@ -1,0 +1,11 @@
+{
+  "name": "examples",
+  "private": true,
+  "dependencies": {
+    "@atla/insights-sdk-js": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.2"
+  }
+}

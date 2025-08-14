@@ -1,0 +1,31 @@
+# .github/workflows/ci.yaml
+name: CI/CD
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+
+jobs:
+    lint-test:
+        name: Lint & Test
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Lint with Biome
+              run: pnpm lint-staged --allow-empty
+
+            - name: Run tests
+              run: pnpm test

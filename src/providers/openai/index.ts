@@ -15,7 +15,7 @@ let openAIInstrumentation: OpenAIInstrumentation | null = null;
  *
  * @example
  * ```typescript
- * import { configure, instrumentOpenAI } from "@atla/insights-sdk";
+ * import { configure, instrumentOpenAI } from "@atla-ai/insights-sdk-js";
  * import OpenAI from "openai";
  *
  * // Configure Atla Insights first
@@ -38,7 +38,7 @@ let openAIInstrumentation: OpenAIInstrumentation | null = null;
  *
  * @example
  * ```typescript
- * import { configure, instrumentOpenAI } from "@atla/insights-sdk";
+ * import { configure, instrumentOpenAI } from "@atla-ai/insights-sdk-js";
  * import OpenAI from "openai";
  *
  * // Configure Atla Insights first
@@ -99,7 +99,7 @@ export function instrumentOpenAI(openaiModule?: any): void {
  *
  * @example
  * ```typescript
- * import { uninstrumentOpenAI } from "@atla/insights-sdk";
+ * import { uninstrumentOpenAI } from "@atla-ai/insights-sdk-js";
  *
  * // Disable OpenAI instrumentation
  * uninstrumentOpenAI();
@@ -125,7 +125,7 @@ export function uninstrumentOpenAI(): void {
  *
  * @example
  * ```typescript
- * import { withInstrumentedOpenAI } from "@atla/insights-sdk";
+ * import { withInstrumentedOpenAI } from "@atla-ai/insights-sdk-js";
  * import OpenAI from "openai";
  *
  * // Use with using statement (requires TypeScript 5.2+)

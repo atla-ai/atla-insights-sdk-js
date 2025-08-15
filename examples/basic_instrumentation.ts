@@ -9,7 +9,7 @@ import {
 	instrument,
 	markSuccess,
 	setMetadata,
-} from "@atla/insights-sdk-js";
+} from "@atla-ai/insights-sdk-js";
 
 async function main(): Promise<void> {
 	configure({

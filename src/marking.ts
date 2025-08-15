@@ -27,7 +27,7 @@ function markRootSpan(value: 0 | 1): void {
  * This function should only be called within an instrumented function.
  *
  * ```typescript
- * import { instrument, markSuccess } from "@atla-insights/core";
+ * import { instrument, markSuccess } from "@atla-ai/insights-sdk-js";
  *
  * const myFunction = instrument("My Function")(
  *   function(): string {
@@ -47,7 +47,7 @@ export function markSuccess(): void {
  * This function should only be called within an instrumented function.
  *
  * ```typescript
- * import { instrument, markFailure } from "@atla-insights/core";
+ * import { instrument, markFailure } from "@atla-ai/insights-sdk-js";
  *
  * const myFunction = instrument("My Function")(
  *   function(): string {

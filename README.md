@@ -16,19 +16,19 @@ To get started with Atla Insights, you can either follow the instructions below,
 ## Installation
 
 ```bash
-npm install @atla/insights-sdk-js
+npm install @atla-ai/insights-sdk-js
 ```
 
 Or with pnpm:
 
 ```bash
-pnpm add @atla/insights-sdk-js
+pnpm add @atla-ai/insights-sdk-js
 ```
 
 Or with yarn:
 
 ```bash
-yarn add @atla/insights-sdk-js
+yarn add @atla-ai/insights-sdk-js
 ```
 
 ## Usage
@@ -38,7 +38,7 @@ yarn add @atla/insights-sdk-js
 Before using Atla Insights, you need to configure it with your authentication token:
 
 ```typescript
-import { configure } from "@atla/insights-sdk-js";
+import { configure } from "@atla-ai/insights-sdk-js";
 
 // Run this command at the start of your application.
 configure({ 
@@ -62,7 +62,7 @@ All instrumentation methods share a common interface, which allows you to do the
     You can manually enable/disable instrumentation throughout your application.
 
 ```typescript
-import { configure, instrumentOpenAI, uninstrumentOpenAI } from "@atla/insights-sdk-js";
+import { configure, instrumentOpenAI, uninstrumentOpenAI } from "@atla-ai/insights-sdk-js";
 import OpenAI from "openai";
 
 configure({ token: "..." });
@@ -79,7 +79,7 @@ uninstrumentOpenAI();
     All instrumentation methods also provide a disposable resource pattern that automatically handles (un)instrumentation.
 
 ```typescript
-import { configure, withInstrumentedOpenAI } from "@atla/insights-sdk-js";
+import { configure, withInstrumentedOpenAI } from "@atla-ai/insights-sdk-js";
 import OpenAI from "openai";
 
 configure({ token: "..." });
@@ -113,7 +113,7 @@ We currently support the following LLM providers:
 ⚠️ Note that, by default, instrumented LLM calls will be treated independently from one another. In order to logically group LLM calls into a trace, you will need to group them as follows:
 
 ```typescript
-import { configure, instrument, instrumentOpenAI } from "@atla/insights-sdk-js";
+import { configure, instrument, instrumentOpenAI } from "@atla-ai/insights-sdk-js";
 import OpenAI from "openai";
 
 configure({ token: "..." });
@@ -140,7 +140,7 @@ const runMyAgent = instrument("My agent doing its thing")(
 It is also possible to manually record LLM generations using the lower-level span SDK.
 
 ```typescript
-import { startAsCurrentSpan } from "@atla/insights-sdk-js";
+import { startAsCurrentSpan } from "@atla-ai/insights-sdk-js";
 
 const { span, endSpan } = startAsCurrentSpan("my-llm-generation");
 try {
@@ -175,7 +175,7 @@ Note that the expected data format are OpenAI Chat Completions compatible messag
 You can attach metadata to a run that provides additional information about the specs of that specific workflow. This can include various system settings, prompt versions, etc.
 
 ```typescript
-import { configure } from "@atla/insights-sdk-js";
+import { configure } from "@atla-ai/insights-sdk-js";
 
 // We can define some system settings, prompt versions, etc. we'd like to keep track of.
 const metadata = {
@@ -195,7 +195,7 @@ configure({
 You can also set metadata dynamically within instrumented functions:
 
 ```typescript
-import { instrument, setMetadata } from "@atla/insights-sdk-js";
+import { instrument, setMetadata } from "@atla-ai/insights-sdk-js";
 
 const myFunction = instrument("My Function")(
   function(): void {
@@ -210,7 +210,7 @@ const myFunction = instrument("My Function")(
 
 The logical notion of _success_ or _failure_ plays a prominent role in the observability of (agentic) GenAI applications.
 
-Therefore, the `@atla/insights-sdk-js` package offers the functionality to mark a trace as a success or a failure like follows:
+Therefore, the `@atla-ai/insights-sdk-js` package offers the functionality to mark a trace as a success or a failure like follows:
 
 ```typescript
 import {
@@ -219,7 +219,7 @@ import {
   instrumentOpenAI,
   markFailure,
   markSuccess,
-} from "@atla/insights-sdk-js";
+} from "@atla-ai/insights-sdk-js";
 import OpenAI from "openai";
 
 configure({ token: "..." });
@@ -254,9 +254,9 @@ const runMyAgent = instrument("My agent doing its thing")(
 
 ### Compatibility with existing observability
 
-As `@atla/insights-sdk-js` provides its own instrumentation, we should note potential interactions with our instrumentation / observability providers.
+As `@atla-ai/insights-sdk-js` provides its own instrumentation, we should note potential interactions with our instrumentation / observability providers.
 
-`@atla/insights-sdk-js` instrumentation is generally compatible with most popular observability platforms.
+`@atla-ai/insights-sdk-js` instrumentation is generally compatible with most popular observability platforms.
 
 #### OpenTelemetry compatibility
 

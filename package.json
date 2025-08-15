@@ -1,5 +1,5 @@
 {
-	"name": "@atla/insights-sdk-js",
+	"name": "@atla-ai/insights-sdk-js",
 	"version": "0.0.1",
 	"description": "JavaScript SDK for Atla Insights platform",
 	"main": "src/index.ts",

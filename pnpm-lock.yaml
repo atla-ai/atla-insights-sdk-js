@@ -81,7 +81,7 @@ importers:
 
   examples:
     dependencies:
-      '@atla/insights-sdk-js':
+      '@atla-ai/insights-sdk-js':
         specifier: workspace:*
         version: link:..
     devDependencies:

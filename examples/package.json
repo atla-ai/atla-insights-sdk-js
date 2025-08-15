@@ -2,7 +2,7 @@
   "name": "examples",
   "private": true,
   "dependencies": {
-    "@atla/insights-sdk-js": "workspace:*"
+    "@atla-ai/insights-sdk-js": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.20.4",

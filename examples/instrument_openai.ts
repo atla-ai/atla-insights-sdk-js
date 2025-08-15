@@ -4,7 +4,7 @@
 import { diag, DiagConsoleLogger, DiagLogLevel } from "@opentelemetry/api";
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
-import { configure, instrument, instrumentOpenAI } from "@atla/insights-sdk-js";
+import { configure, instrument, instrumentOpenAI } from "@atla-ai/insights-sdk-js";
 
 async function main(): Promise<void> {
 	configure({

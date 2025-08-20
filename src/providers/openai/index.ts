@@ -76,11 +76,6 @@ export function instrumentOpenAI(openaiModule?: any): void {
 		tracerProvider: ATLA_INSIGHTS.getTracerProvider(),
 	});
 
-	// Object.defineProperty(openAIInstrumentation, 'tracer', {
-	// 	get: () => ATLA_INSIGHTS.getTracer(),
-	// 	configurable: true
-	// });
-
 	// If a module is provided, manually instrument it
 	if (openaiModule) {
 		openAIInstrumentation.manuallyInstrument(openaiModule);

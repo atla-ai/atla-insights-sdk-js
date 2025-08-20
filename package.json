@@ -20,8 +20,13 @@
 	"license": "ISC",
 	"packageManager": "pnpm@10.14.0",
 	"dependencies": {
+		"@arizeai/openinference-instrumentation-langchain": "^3.2.1",
 		"@arizeai/openinference-instrumentation-openai": "^3.2.1",
 		"@arizeai/openinference-semantic-conventions": "^2.1.1",
+		"@langchain/community": "^0.3.53",
+		"@langchain/core": "^0.3.72",
+		"@langchain/langgraph": "^0.4.5",
+		"@langchain/openai": "^0.6.9",
 		"@opentelemetry/api": "^1.9.0",
 		"@opentelemetry/auto-instrumentations-node": "^0.50.0",
 		"@opentelemetry/exporter-trace-otlp-http": "^0.52.1",
@@ -30,7 +35,8 @@
 		"@opentelemetry/sdk-node": "^0.53.0",
 		"@opentelemetry/sdk-trace-node": "^1.25.1",
 		"@opentelemetry/semantic-conventions": "^1.36.0",
-		"ts-node": "^10.9.2"
+		"ts-node": "^10.9.2",
+		"zod": "^4.0.17"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.4",

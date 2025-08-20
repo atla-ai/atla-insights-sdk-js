@@ -359,7 +359,7 @@ describe("startAsCurrentSpan", () => {
 		const spans = realInMemorySpanExporter.getFinishedSpans();
 		expect(spans.length).toBe(1);
 		expect(spans[0].name).toBe("test-span");
-		expect(spans[0].attributes["test"]).toBe("value");
+		expect(spans[0].attributes.test).toBe("value");
 		expect(spans[0].endTime).toBeDefined();
 	});
 
@@ -378,7 +378,7 @@ describe("startAsCurrentSpan", () => {
 		const spans = realInMemorySpanExporter.getFinishedSpans();
 		expect(spans.length).toBe(1);
 		expect(spans[0].name).toBe("async-span");
-		expect(spans[0].attributes["async"]).toBe("test");
+		expect(spans[0].attributes.async).toBe("test");
 		expect(spans[0].endTime).toBeDefined();
 	});
 

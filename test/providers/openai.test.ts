@@ -8,10 +8,14 @@ import {
 	jest,
 } from "@jest/globals";
 import OpenAI from "openai";
-import { BaseAtlaTest, realInMemorySpanExporter, mockAtlaInsightsWithRealOtel as mockAtlaInsights } from "../setup";
-import { 
-	OpenInferenceSpanKind, 
-	SemanticConventions 
+import {
+	BaseAtlaTest,
+	realInMemorySpanExporter,
+	mockAtlaInsightsWithRealOtel as mockAtlaInsights,
+} from "../setup";
+import {
+	OpenInferenceSpanKind,
+	SemanticConventions,
 } from "@arizeai/openinference-semantic-conventions";
 
 describe("OpenAI Provider", () => {
@@ -28,7 +32,11 @@ describe("OpenAI Provider", () => {
 	let markFailure: any;
 
 	// Import the mock helpers
-	const { OpenAI: MockOpenAI, setOpenAIMockResponse, resetOpenAIMock } = require("../__mocks__/openai");
+	const {
+		OpenAI: MockOpenAI,
+		setOpenAIMockResponse,
+		resetOpenAIMock,
+	} = require("../__mocks__/openai");
 
 	beforeAll(async () => {
 		const openaiModule = await import("../../src/providers/openai/index");
@@ -142,15 +150,18 @@ describe("OpenAI Provider", () => {
 			// Verify span was created
 			const spans = realInMemorySpanExporter.getFinishedSpans();
 			expect(spans.length).toBeGreaterThan(0);
-			
-			const llmSpan = spans.find(s => 
-				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] === OpenInferenceSpanKind.LLM
+
+			const llmSpan = spans.find(
+				(s) =>
+					s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
+					OpenInferenceSpanKind.LLM,
 			);
 			expect(llmSpan).toBeDefined();
 			expect(llmSpan?.name).toBe("OpenAI Chat Completions");
 			expect(llmSpan?.attributes).toEqual(
 				expect.objectContaining({
-					[SemanticConventions.OPENINFERENCE_SPAN_KIND]: OpenInferenceSpanKind.LLM,
+					[SemanticConventions.OPENINFERENCE_SPAN_KIND]:
+						OpenInferenceSpanKind.LLM,
 					"llm.input_messages.0.message.role": "user",
 					"llm.input_messages.0.message.content": "Hello!",
 					"llm.output_messages.0.message.role": "assistant",
@@ -158,7 +169,7 @@ describe("OpenAI Provider", () => {
 					[SemanticConventions.LLM_MODEL_NAME]: "gpt-4",
 					"llm.provider": "openai",
 					"llm.system": "openai",
-				})
+				}),
 			);
 		});
 
@@ -177,12 +188,14 @@ describe("OpenAI Provider", () => {
 
 			const spans = realInMemorySpanExporter.getFinishedSpans();
 			expect(spans.length).toBeGreaterThanOrEqual(2); // root span + openai span
-			
-			const rootSpan = spans.find(s => s.name === "root_span");
+
+			const rootSpan = spans.find((s) => s.name === "root_span");
 			expect(rootSpan).toBeDefined();
-			
-			const llmSpan = spans.find(s => 
-				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] === OpenInferenceSpanKind.LLM
+
+			const llmSpan = spans.find(
+				(s) =>
+					s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
+					OpenInferenceSpanKind.LLM,
 			);
 			expect(llmSpan).toBeDefined();
 		});
@@ -203,9 +216,9 @@ describe("OpenAI Provider", () => {
 			const result = await testFunction();
 
 			expect(result).toBe("test result");
-			
+
 			const spans = realInMemorySpanExporter.getFinishedSpans();
-			const rootSpan = spans.find(s => s.name === "root_span");
+			const rootSpan = spans.find((s) => s.name === "root_span");
 			expect(rootSpan).toBeDefined();
 			expect(rootSpan?.attributes["atla.mark.success"]).toBe(1);
 		});
@@ -226,8 +239,10 @@ describe("OpenAI Provider", () => {
 			).rejects.toThrow("Internal server error");
 
 			const spans = realInMemorySpanExporter.getFinishedSpans();
-			const llmSpan = spans.find(s => 
-				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] === OpenInferenceSpanKind.LLM
+			const llmSpan = spans.find(
+				(s) =>
+					s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
+					OpenInferenceSpanKind.LLM,
 			);
 			expect(llmSpan).toBeDefined();
 			// Check that the span recorded the error
@@ -256,9 +271,9 @@ describe("OpenAI Provider", () => {
 			});
 
 			await expect(testFunction()).rejects.toThrow("Bad request");
-			
+
 			const spans = realInMemorySpanExporter.getFinishedSpans();
-			const rootSpan = spans.find(s => s.name === "root_span");
+			const rootSpan = spans.find((s) => s.name === "root_span");
 			expect(rootSpan).toBeDefined();
 			// Root span should be marked as successful even though it threw
 			expect(rootSpan?.attributes["marking.success"]).toBe(true);
@@ -276,17 +291,20 @@ describe("OpenAI Provider", () => {
 			});
 
 			const spans = realInMemorySpanExporter.getFinishedSpans();
-			const llmSpan = spans.find(s => 
-				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] === OpenInferenceSpanKind.LLM
+			const llmSpan = spans.find(
+				(s) =>
+					s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
+					OpenInferenceSpanKind.LLM,
 			);
 			expect(llmSpan).toBeDefined();
 			expect(llmSpan?.attributes).toEqual(
 				expect.objectContaining({
-					[SemanticConventions.OPENINFERENCE_SPAN_KIND]: OpenInferenceSpanKind.LLM,
+					[SemanticConventions.OPENINFERENCE_SPAN_KIND]:
+						OpenInferenceSpanKind.LLM,
 					[SemanticConventions.LLM_MODEL_NAME]: "gpt-3.5-turbo-instruct",
 					"input.value": "Hello",
 					"output.value": "Hello, world!",
-				})
+				}),
 			);
 		});
 
@@ -299,16 +317,19 @@ describe("OpenAI Provider", () => {
 			});
 
 			const spans = realInMemorySpanExporter.getFinishedSpans();
-			const embeddingSpan = spans.find(s => 
-				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] === OpenInferenceSpanKind.EMBEDDING
+			const embeddingSpan = spans.find(
+				(s) =>
+					s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
+					OpenInferenceSpanKind.EMBEDDING,
 			);
 			expect(embeddingSpan).toBeDefined();
 			expect(embeddingSpan?.attributes).toEqual(
 				expect.objectContaining({
-					[SemanticConventions.OPENINFERENCE_SPAN_KIND]: OpenInferenceSpanKind.EMBEDDING,
+					[SemanticConventions.OPENINFERENCE_SPAN_KIND]:
+						OpenInferenceSpanKind.EMBEDDING,
 					[SemanticConventions.EMBEDDING_MODEL_NAME]: "text-embedding-ada-002",
 					"embedding.embeddings.0.embedding.text": "Hello world",
-				})
+				}),
 			);
 		});
 
@@ -332,19 +353,22 @@ describe("OpenAI Provider", () => {
 			expect(chunks.length).toBeGreaterThan(0);
 
 			// Wait a bit for spans to be exported
-			await new Promise(resolve => setTimeout(resolve, 100));
+			await new Promise((resolve) => setTimeout(resolve, 100));
 
 			const spans = realInMemorySpanExporter.getFinishedSpans();
-			const llmSpan = spans.find(s => 
-				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] === OpenInferenceSpanKind.LLM
+			const llmSpan = spans.find(
+				(s) =>
+					s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
+					OpenInferenceSpanKind.LLM,
 			);
 			expect(llmSpan).toBeDefined();
 			expect(llmSpan?.attributes).toEqual(
 				expect.objectContaining({
-					[SemanticConventions.OPENINFERENCE_SPAN_KIND]: OpenInferenceSpanKind.LLM,
+					[SemanticConventions.OPENINFERENCE_SPAN_KIND]:
+						OpenInferenceSpanKind.LLM,
 					"llm.input_messages.0.message.role": "user",
 					"llm.input_messages.0.message.content": "Hello!",
-				})
+				}),
 			);
 		});
 	});

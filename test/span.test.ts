@@ -355,7 +355,7 @@ describe("startAsCurrentSpan", () => {
 
 		expect(result).toBe("result");
 		expect(testFunction).toHaveBeenCalledWith(expect.any(AtlaSpan));
-		
+
 		const spans = realInMemorySpanExporter.getFinishedSpans();
 		expect(spans.length).toBe(1);
 		expect(spans[0].name).toBe("test-span");
@@ -374,7 +374,7 @@ describe("startAsCurrentSpan", () => {
 
 		expect(result).toBe("async-result");
 		expect(testFunction).toHaveBeenCalledWith(expect.any(AtlaSpan));
-		
+
 		const spans = realInMemorySpanExporter.getFinishedSpans();
 		expect(spans.length).toBe(1);
 		expect(spans[0].name).toBe("async-span");
@@ -390,7 +390,7 @@ describe("startAsCurrentSpan", () => {
 		await expect(
 			startAsCurrentSpan("error-span", testFunction),
 		).rejects.toThrow("Test error");
-		
+
 		const spans = realInMemorySpanExporter.getFinishedSpans();
 		expect(spans.length).toBe(1);
 		expect(spans[0].name).toBe("error-span");
@@ -409,7 +409,7 @@ describe("startAsCurrentSpan", () => {
 		await expect(
 			startAsCurrentSpan("async-error-span", testFunction),
 		).rejects.toThrow("Async error");
-		
+
 		const spans = realInMemorySpanExporter.getFinishedSpans();
 		expect(spans.length).toBe(1);
 		expect(spans[0].name).toBe("async-error-span");

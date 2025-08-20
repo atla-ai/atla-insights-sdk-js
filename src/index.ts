@@ -27,7 +27,7 @@ export {
 
 // LangChain/LangGraph instrumentation
 export {
-  instrumentLangChain,
-  uninstrumentLangChain,
-  withInstrumentedLangChain,
+	instrumentLangChain,
+	uninstrumentLangChain,
+	withInstrumentedLangChain,
 } from "./providers/langchain/index";

@@ -33,7 +33,6 @@ describe("OpenAI Provider", () => {
 
 	// Import the mock helpers
 	const {
-		OpenAI: MockOpenAI,
 		setOpenAIMockResponse,
 		resetOpenAIMock,
 	} = require("../__mocks__/openai");

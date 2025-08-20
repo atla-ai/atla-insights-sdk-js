@@ -1,5 +1,4 @@
 // Mock OpenAI SDK
-// biome-ignore lint/suspicious/noExplicitAny: allow any
 const getCompletionsResponse = (args: any) => ({
 	id: "chatcmpl_test",
 	object: "chat.completion",
@@ -16,7 +15,6 @@ const getCompletionsResponse = (args: any) => ({
 });
 
 // Allow tests to override the mock behavior
-// biome-ignore lint/suspicious/noExplicitAny: allow any
 let mockOverride: ((args: any) => any) | null = null;
 
 // Track calls for test assertions
@@ -26,7 +24,6 @@ const mockCalls = {
 	embeddings: jest.fn(),
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: allow any
 export const setOpenAIMockResponse = (responseFn: (args: any) => any) => {
 	mockOverride = responseFn;
 };
@@ -41,18 +38,15 @@ export const resetOpenAIMock = () => {
 export const getMockCalls = () => mockCalls;
 
 // Mock APIPromise class
-// biome-ignore lint/suspicious/noExplicitAny: allow any
 class MockAPIPromise extends Promise<any> {
 	private parsedPromise: Promise<any> | null = null;
 
 	// OpenAI APIPromise method for unwrapping the response
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	_thenUnwrap<T>(onfulfilled?: (value: any) => T | PromiseLike<T>): Promise<T> {
 		return this.then(onfulfilled);
 	}
 
 	// Method that might be used by the instrumentation
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	parse(): Promise<any> {
 		if (!this.parsedPromise) {
 			this.parsedPromise = this.then((result) => result);
@@ -61,7 +55,6 @@ class MockAPIPromise extends Promise<any> {
 	}
 
 	// Method to handle response headers (might be needed)
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	asResponse(): Promise<any> {
 		return this.then((result) => ({
 			data: result,
@@ -70,7 +63,6 @@ class MockAPIPromise extends Promise<any> {
 	}
 
 	// Method to handle response with headers
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	withResponse(): Promise<any> {
 		return this.asResponse();
 	}
@@ -78,7 +70,6 @@ class MockAPIPromise extends Promise<any> {
 
 // Mock the inner Chat.Completions class
 class MockChatCompletions {
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	create(args: any) {
 		mockCalls.chatCompletions(args);
 
@@ -112,7 +103,7 @@ class MockChatCompletions {
 								for (const c of chunks) yield c;
 							},
 							// Add tee method for streaming
-							tee: function () {
+							tee: () => {
 								const stream1 = {
 									[Symbol.asyncIterator]: async function* () {
 										for (const c of chunks) yield c;
@@ -143,7 +134,6 @@ class MockChatCompletions {
 
 // Mock the Completions class
 class MockCompletions {
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	create(args: any) {
 		mockCalls.completions(args);
 
@@ -186,7 +176,6 @@ class MockCompletions {
 
 // Mock the Embeddings class
 class MockEmbeddings {
-	// biome-ignore lint/suspicious/noExplicitAny: allow any
 	create(args: any) {
 		mockCalls.embeddings(args);
 

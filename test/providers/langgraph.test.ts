@@ -60,7 +60,7 @@ describe("langgraph", () => {
 		);
 		expect(llmSpans.length).toBe(1);
 
-		const span = llmSpans[0]!;
+		const span = llmSpans[0];
 		expect(span.name).toBe("ChatOpenAI");
 		expect(span.attributes).toEqual(
 			expect.objectContaining({
@@ -162,13 +162,14 @@ describe("langgraph", () => {
 		});
 
 		const spans = realInMemorySpanExporter.getFinishedSpans();
+		expect(spans).toBeDefined();
 
 		const llm = spans.find(
 			(s) =>
 				s.attributes[SemanticConventions.OPENINFERENCE_SPAN_KIND] ===
 					OpenInferenceSpanKind.LLM && s.name === "ChatOpenAI",
-		)!;
-		expect(llm.attributes).toEqual(
+		);
+		expect(llm?.attributes).toEqual(
 			expect.objectContaining({
 				[SemanticConventions.OPENINFERENCE_SPAN_KIND]:
 					OpenInferenceSpanKind.LLM,
@@ -184,7 +185,7 @@ describe("langgraph", () => {
 		);
 		expect(toolSpans.length).toBe(1);
 
-		const toolSpan = toolSpans[0]!;
+		const toolSpan = toolSpans[0];
 		expect(toolSpan.name).toBe("search");
 		expect(toolSpan.attributes).toEqual(
 			expect.objectContaining({

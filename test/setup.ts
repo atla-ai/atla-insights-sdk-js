@@ -2,36 +2,33 @@
 import { jest } from "@jest/globals";
 import type { ReadableSpan } from "@opentelemetry/sdk-trace-base";
 import { InMemorySpanExporter } from "@opentelemetry/sdk-trace-base";
+import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
+import { SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { resourceFromAttributes } from "@opentelemetry/resources";
+import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 
-// Global in-memory span exporter for testing
-export const inMemorySpanExporter = new InMemorySpanExporter();
+// Real in-memory exporter + provider for tests
+export const realInMemorySpanExporter = new InMemorySpanExporter();
+const realTracerProvider = new NodeTracerProvider({
+	resource: resourceFromAttributes({
+		[ATTR_SERVICE_NAME]: "test-service",
+	}),
+	spanProcessors: [new SimpleSpanProcessor(realInMemorySpanExporter)],
+});
+realTracerProvider.register();
 
-// Mock ATLA_INSIGHTS before any imports
-const mockTracer = {
-	startActiveSpan: jest.fn(),
-};
-
-const mockTracerProvider = {
-	register: jest.fn(),
-	addSpanProcessor: jest.fn(),
-};
-
-export const mockAtlaInsights = {
+// Mock ATLA_INSIGHTS to use the real tracer/provider
+export const mockAtlaInsightsWithRealOtel = {
 	configure: jest.fn(),
-	getTracer: jest.fn(() => mockTracer),
-	getTracerProvider: jest.fn(() => mockTracerProvider),
+	getTracer: jest.fn(() => realTracerProvider.getTracer("test-tracer")),
+	getTracerProvider: jest.fn(() => realTracerProvider),
+	registerInstrumentations: jest.fn(),
+	unregisterInstrumentations: jest.fn(),
 	configured: true,
 };
 
-// Mock the main module
 jest.mock("../src/main", () => ({
-	ATLA_INSIGHTS: mockAtlaInsights,
-}));
-
-// Mock context functions
-jest.mock("../src/context", () => ({
-	getAtlaContext: jest.fn(() => ({})),
-	runWithContext: jest.fn((_context, fn: () => any) => fn()),
+	ATLA_INSIGHTS: mockAtlaInsightsWithRealOtel,
 }));
 
 // Test utilities
@@ -39,22 +36,18 @@ export class BaseAtlaTest {
 	protected mockSpan: any;
 
 	beforeEach() {
-		inMemorySpanExporter.reset();
+		realInMemorySpanExporter.reset();
 
-		// Create a mock span that captures attributes
 		this.mockSpan = {
 			attributes: {} as Record<string, any>,
 			events: [] as any[],
 			status: {} as any,
-
 			setAttribute: jest.fn((key: string, value: any) => {
 				this.mockSpan.attributes[key] = value;
 			}),
-
 			setStatus: jest.fn((status: any) => {
 				this.mockSpan.status = status;
 			}),
-
 			recordException: jest.fn((exception: Error) => {
 				this.mockSpan.events.push({
 					name: "exception",
@@ -64,30 +57,17 @@ export class BaseAtlaTest {
 					},
 				});
 			}),
-
 			end: jest.fn(),
 		};
-
-		// Setup the mock tracer to use our mock span
-		mockTracer.startActiveSpan.mockImplementation(((
-			_name: string,
-			options: any,
-			fn: (span: any) => any,
-		) => {
-			if (typeof options === "function") {
-				return options(this.mockSpan);
-			}
-			return fn(this.mockSpan);
-		}) as any);
 	}
 
 	afterEach() {
 		jest.clearAllMocks();
-		inMemorySpanExporter.reset();
+		realInMemorySpanExporter.reset();
 	}
 
-	protected getFinishedSpans(): ReadableSpan[] {
-		return inMemorySpanExporter.getFinishedSpans();
+	public getFinishedSpans(): ReadableSpan[] {
+		return realInMemorySpanExporter.getFinishedSpans();
 	}
 
 	public getMockSpan() {

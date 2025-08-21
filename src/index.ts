@@ -24,3 +24,10 @@ export {
 	uninstrumentOpenAI,
 	withInstrumentedOpenAI,
 } from "./providers/openai/index";
+
+// LangChain/LangGraph instrumentation
+export {
+	instrumentLangChain,
+	uninstrumentLangChain,
+	withInstrumentedLangChain,
+} from "./providers/langchain/index";

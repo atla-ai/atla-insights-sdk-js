@@ -11,6 +11,9 @@ const config: JestConfigWithTsJest = {
 	collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
 	setupFilesAfterEnv: ["<rootDir>/test/setup.ts"],
 	testTimeout: 10000,
+	moduleNameMapper: {
+		"^openai$": "<rootDir>/test/__mocks__/openai.ts",
+	},
 };
 
 export default config;

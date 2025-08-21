@@ -36,7 +36,6 @@ describe("marking", () => {
 		mockRootSpan.setAttribute.mockClear();
 
 		mockGetAtlaContext.mockReturnValue({
-			// biome-ignore lint/suspicious/noExplicitAny: Allow any
 			rootSpan: mockRootSpan as any,
 		});
 	});

@@ -11,7 +11,7 @@ import type {
 	ChatCompletionAssistantMessageParam,
 	ChatCompletionFunctionTool,
 } from "openai/resources/chat/completions";
-import { BaseAtlaTest } from "./setup";
+import { BaseAtlaTest, realInMemorySpanExporter } from "./setup";
 import { AtlaSpan, startAsCurrentSpan } from "../src/span";
 import {
 	SemanticConventions,
@@ -337,10 +337,12 @@ describe("startAsCurrentSpan", () => {
 	beforeEach(() => {
 		baseTest = new BaseAtlaTest();
 		baseTest.beforeEach();
+		realInMemorySpanExporter.reset();
 	});
 
 	afterEach(() => {
 		baseTest.afterEach();
+		realInMemorySpanExporter.reset();
 	});
 
 	it("should create span and run function", async () => {
@@ -353,7 +355,12 @@ describe("startAsCurrentSpan", () => {
 
 		expect(result).toBe("result");
 		expect(testFunction).toHaveBeenCalledWith(expect.any(AtlaSpan));
-		expect(baseTest.getMockSpan().end).toHaveBeenCalled();
+
+		const spans = realInMemorySpanExporter.getFinishedSpans();
+		expect(spans.length).toBe(1);
+		expect(spans[0].name).toBe("test-span");
+		expect(spans[0].attributes.test).toBe("value");
+		expect(spans[0].endTime).toBeDefined();
 	});
 
 	it("should handle async functions", async () => {
@@ -367,7 +374,12 @@ describe("startAsCurrentSpan", () => {
 
 		expect(result).toBe("async-result");
 		expect(testFunction).toHaveBeenCalledWith(expect.any(AtlaSpan));
-		expect(baseTest.getMockSpan().end).toHaveBeenCalled();
+
+		const spans = realInMemorySpanExporter.getFinishedSpans();
+		expect(spans.length).toBe(1);
+		expect(spans[0].name).toBe("async-span");
+		expect(spans[0].attributes.async).toBe("test");
+		expect(spans[0].endTime).toBeDefined();
 	});
 
 	it("should handle exceptions and still end span", async () => {
@@ -378,7 +390,14 @@ describe("startAsCurrentSpan", () => {
 		await expect(
 			startAsCurrentSpan("error-span", testFunction),
 		).rejects.toThrow("Test error");
-		expect(baseTest.getMockSpan().end).toHaveBeenCalled();
+
+		const spans = realInMemorySpanExporter.getFinishedSpans();
+		expect(spans.length).toBe(1);
+		expect(spans[0].name).toBe("error-span");
+		// The implementation only ensures the span ends, it doesn't set error status
+		expect(spans[0].endTime).toBeDefined();
+		// Verify the function was called even though it threw
+		expect(testFunction).toHaveBeenCalled();
 	});
 
 	it("should handle async exceptions and still end span", async () => {
@@ -390,6 +409,13 @@ describe("startAsCurrentSpan", () => {
 		await expect(
 			startAsCurrentSpan("async-error-span", testFunction),
 		).rejects.toThrow("Async error");
-		expect(baseTest.getMockSpan().end).toHaveBeenCalled();
+
+		const spans = realInMemorySpanExporter.getFinishedSpans();
+		expect(spans.length).toBe(1);
+		expect(spans[0].name).toBe("async-error-span");
+		// The implementation only ensures the span ends, it doesn't set error status
+		expect(spans[0].endTime).toBeDefined();
+		// Verify the async function was called even though it threw
+		expect(testFunction).toHaveBeenCalled();
 	});
 });

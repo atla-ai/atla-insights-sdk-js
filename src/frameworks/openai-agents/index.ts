@@ -1,9 +1,9 @@
-import { addTraceProcessor, getGlobalTraceProvider, setTracingDisabled } from "@openai/agents";
-import type {
-	Span,
-	Trace,
-	TracingProcessor
+import {
+	addTraceProcessor,
+	getGlobalTraceProvider,
+	setTracingDisabled,
 } from "@openai/agents";
+import type { Span, Trace, TracingProcessor } from "@openai/agents";
 import type { Responses } from "openai/resources/responses";
 import type { ResponseInputItem } from "openai/resources/responses/responses";
 import type {
@@ -57,6 +57,27 @@ import { safeSerialize } from "./utils";
 import { getAtlaContext } from "../../context";
 import { ATLA_INSIGHTS } from "../../main";
 
+/**
+ * Instrument the OpenAI Agents SDK.
+ *
+ * This function enables tracing for all OpenAI Agents SDK API calls made through
+ * the official OpenAI Agents SDK client.
+ *
+ * @example
+ * ```typescript
+ * import { configure, instrumentOpenAIAgents } from "@atla-ai/insights-sdk-js";
+ *
+ * // Configure Atla Insights first
+ * configure({ token: process.env.ATLA_API_KEY! });
+ *
+ * // Enable OpenAI Agents instrumentation
+ * instrumentOpenAIAgents();
+ *
+ * // Use OpenAI Agents as normal - it will be automatically traced
+ * ```
+ *
+ * @returns void
+ */
 export function instrumentOpenAIAgents(): void {
 	const ctx = getAtlaContext();
 	if (ctx?.suppressInstrumentation) {

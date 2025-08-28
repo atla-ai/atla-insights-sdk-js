@@ -745,8 +745,7 @@ describe("getAttributesFromChatCompletionsMessageContent", () => {
 			"content_list",
 			[{ type: "text", text: "Hi" }],
 			{
-				"llm.input_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.input_messages.0.message.contents.0.message_content.type": "text",
 				"llm.input_messages.0.message.contents.0.message_content.text": "Hi",
 			},
 		],
@@ -759,11 +758,9 @@ describe("getAttributesFromChatCompletionsMessageContent", () => {
 				{ type: "text", text: "World" },
 			],
 			{
-				"llm.input_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.input_messages.0.message.contents.0.message_content.type": "text",
 				"llm.input_messages.0.message.contents.0.message_content.text": "Hello",
-				"llm.input_messages.0.message.contents.1.message_content.type":
-					"text",
+				"llm.input_messages.0.message.contents.1.message_content.type": "text",
 				"llm.input_messages.0.message.contents.1.message_content.text": "World",
 			},
 		],
@@ -1382,8 +1379,7 @@ describe("getAttributesFromResponse", () => {
 				}),
 				"llm.model_name": "gpt-4",
 				"llm.output_messages.0.message.contents.0.message_content.text": "Hi",
-				"llm.output_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.output_messages.0.message.contents.0.message_content.type": "text",
 				"llm.output_messages.0.message.role": "assistant",
 				"llm.token_count.completion": 5,
 				"llm.token_count.completion_details.reasoning": 0,
@@ -1591,12 +1587,10 @@ describe("getAttributesFromResponse", () => {
 				}),
 				"llm.model_name": "gpt-4",
 				"llm.output_messages.0.message.contents.0.message_content.text": "Hi",
-				"llm.output_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.output_messages.0.message.contents.0.message_content.type": "text",
 				"llm.output_messages.0.message.contents.1.message_content.text":
 					"I cannot help with that",
-				"llm.output_messages.0.message.contents.1.message_content.type":
-					"text",
+				"llm.output_messages.0.message.contents.1.message_content.type": "text",
 				"llm.output_messages.0.message.role": "assistant",
 				"llm.output_messages.1.message.role": "assistant",
 				"llm.output_messages.1.message.tool_calls.0.tool_call.id": "123",
@@ -1862,8 +1856,7 @@ describe("getAttributesFromResponseOutput", () => {
 			],
 			{
 				"llm.output_messages.0.message.role": "assistant",
-				"llm.output_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.output_messages.0.message.contents.0.message_content.type": "text",
 				"llm.output_messages.0.message.contents.0.message_content.text": "Hi",
 			},
 		],
@@ -1909,8 +1902,7 @@ describe("getAttributesFromResponseOutput", () => {
 			],
 			{
 				"llm.output_messages.0.message.role": "assistant",
-				"llm.output_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.output_messages.0.message.contents.0.message_content.type": "text",
 				"llm.output_messages.0.message.contents.0.message_content.text": "Hi",
 				"llm.output_messages.1.message.role": "assistant",
 				"llm.output_messages.1.message.tool_calls.0.tool_call.id": "123",
@@ -1976,12 +1968,10 @@ describe("getAttributesFromResponseOutput", () => {
 			],
 			{
 				"llm.output_messages.0.message.role": "assistant",
-				"llm.output_messages.0.message.contents.0.message_content.type":
-					"text",
+				"llm.output_messages.0.message.contents.0.message_content.type": "text",
 				"llm.output_messages.0.message.contents.0.message_content.text": "Hi",
 				"llm.output_messages.1.message.role": "assistant",
-				"llm.output_messages.1.message.contents.0.message_content.type":
-					"text",
+				"llm.output_messages.1.message.contents.0.message_content.type": "text",
 				"llm.output_messages.1.message.contents.0.message_content.text":
 					"World",
 			},

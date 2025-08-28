@@ -112,8 +112,14 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	 * Type guard for variants that carry tool results as
 	 * { type: 'function_call_result', callId?: string, output?: any }.
 	 */
-	private isFunctionCallResult(item: unknown): item is { type: string; callId?: string; output?: any } {
-		return !!item && typeof item === "object" && (item as any).type === "function_call_result";
+	private isFunctionCallResult(
+		item: unknown,
+	): item is { type: string; callId?: string; output?: any } {
+		return (
+			!!item &&
+			typeof item === "object" &&
+			(item as any).type === "function_call_result"
+		);
 	}
 
 	/**
@@ -238,7 +244,10 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 				otelSpan.setAttribute(key, value);
 			}
 		} else if (data.type === "function") {
-			const functionAttributes = this.getAttributesFromFunctionSpanData(data, traceId);
+			const functionAttributes = this.getAttributesFromFunctionSpanData(
+				data,
+				traceId,
+			);
 			for (const [key, value] of functionAttributes) {
 				otelSpan.setAttribute(key, value);
 			}
@@ -384,7 +393,10 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 				// Normalize function_call_result (with nested output object) into a tool message
 				yield [`${prefix}${MESSAGE_ROLE}`, SemanticAttributePrefixes.tool];
 				if (item.callId && typeof item.callId === "string") {
-					yield [`${prefix}${MESSAGE_TOOL_CALL_ID}`, item.callId as AttributeValue];
+					yield [
+						`${prefix}${MESSAGE_TOOL_CALL_ID}`,
+						item.callId as AttributeValue,
+					];
 				}
 				const output: any = item.output;
 				if (typeof output === "string") {
@@ -458,7 +470,8 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 			yield [`${prefix}${TOOL_CALL_FUNCTION_ARGUMENTS_JSON}`, obj.arguments];
 		}
 		if (traceId && this.toolCache.has(traceId)) {
-			const tool: Responses.FunctionTool | Responses.CustomTool = this.toolCache.get(traceId)?.[obj.name];
+			const tool: Responses.FunctionTool | Responses.CustomTool =
+				this.toolCache.get(traceId)?.[obj.name];
 			if (tool) {
 				yield [`${prefix}${TOOL_DESCRIPTION}`, tool.description ?? ""];
 				if ("parameters" in tool && tool.parameters !== undefined) {
@@ -473,7 +486,8 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 		traceId?: string,
 	): Generator<[string, AttributeValue]> {
 		if (traceId && this.toolCache.has(traceId)) {
-			const tool: Responses.FunctionTool | Responses.CustomTool = this.toolCache.get(traceId)?.[obj.name];
+			const tool: Responses.FunctionTool | Responses.CustomTool =
+				this.toolCache.get(traceId)?.[obj.name];
 			if (tool) {
 				yield [TOOL_NAME, tool.name];
 				yield [TOOL_DESCRIPTION, tool.description ?? ""];
@@ -567,7 +581,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 					"assistant",
 				];
 				const prefix = `${LLM_OUTPUT_MESSAGES}.${message_index}.${MESSAGE_TOOL_CALLS}.${toolCallIndex}.`;
-				yield* this.getAttributesFromFunctionToolCall(item, traceId,prefix);
+				yield* this.getAttributesFromFunctionToolCall(item, traceId, prefix);
 				toolCallIndex++;
 			} else if (item.type === "custom_tool_call") {
 				const prefix = `${LLM_OUTPUT_MESSAGES}.${message_index}.`;

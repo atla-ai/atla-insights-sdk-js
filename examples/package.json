@@ -4,6 +4,8 @@
   "dependencies": {
     "@atla-ai/insights-sdk-js": "workspace:*",
     "@langchain/anthropic": "^0.3.26",
+    "@openai/agents": "^0.0.17",
+    "@openai/agents-core": "^0.0.17",
     "zod": "^4.0.17"
   },
   "devDependencies": {

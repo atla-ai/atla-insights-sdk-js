@@ -13,7 +13,7 @@ let lcInstrumentation: LangChainInstrumentation | null = null;
  *
  * This function enables tracing for all LangChain API calls made through
  * the official LangChain JavaScript/TypeScript client.
- * 
+ *
  * @example
  * ```typescript
  * import { configure, instrumentLangChain } from "@atla-ai/insights-sdk-js";

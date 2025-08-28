@@ -1,22 +1,18 @@
-import {
-	addTraceProcessor,
-	getGlobalTraceProvider,
-	setTracingDisabled,
+import { addTraceProcessor, getGlobalTraceProvider, setTracingDisabled } from "@openai/agents";
+import type {
 	Span,
 	Trace,
-	TracingProcessor,
+	TracingProcessor
 } from "@openai/agents";
-import { Responses } from "openai/resources/responses";
-import { ResponseInputItem } from "openai/resources/responses/responses";
-import {
+import type { Responses } from "openai/resources/responses";
+import type { ResponseInputItem } from "openai/resources/responses/responses";
+import type {
 	Span as OtelSpan,
-	SpanStatusCode,
-	trace,
-	context,
 	Context,
 	SpanStatus,
 	AttributeValue,
 } from "@opentelemetry/api";
+import { trace, context, SpanStatusCode } from "@opentelemetry/api";
 import {
 	LLMSystem,
 	OpenInferenceSpanKind,
@@ -80,7 +76,7 @@ export function instrumentOpenAIAgents(): void {
 	try {
 		addTraceProcessor(processor);
 	} catch {
-		const provider = getGlobalTraceProvider() as any;
+		const provider = getGlobalTraceProvider();
 		if (typeof provider.registerProcessor === "function") {
 			provider.registerProcessor(processor);
 		} else {
@@ -96,6 +92,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	private rootSpans = new Map<string, OtelSpan>();
 	private spanMap = new Map<string, OtelSpan>();
 	private tokens = new Map<string, Context>();
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	private toolCache = new Map<string, Record<string, any>>();
 
 	private MAX_HANDOFFS_IN_FLIGHT = 1000;
@@ -114,10 +111,12 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	 */
 	private isFunctionCallResult(
 		item: unknown,
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	): item is { type: string; callId?: string; output?: any } {
 		return (
 			!!item &&
 			typeof item === "object" &&
+			// biome-ignore lint/suspicious/noExplicitAny: Allow any
 			(item as any).type === "function_call_result"
 		);
 	}
@@ -158,6 +157,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	 *
 	 * @param span - The span that has started.
 	 */
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	async onSpanStart(span: Span<any>): Promise<void> {
 		if (span.startedAt === null) {
 			return;
@@ -198,6 +198,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	 *
 	 * @param span - The span that has ended.
 	 */
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	async onSpanEnd(span: Span<any>): Promise<void> {
 		if (this.tokens.has(span.spanId)) {
 			trace.deleteSpan(this.tokens.get(span.spanId) as Context);
@@ -308,6 +309,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 		// pass
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	private getSpanName(span: Span<any>): string {
 		if ("name" in span.spanData && typeof span.spanData.name === "string") {
 			return span.spanData.name;
@@ -318,6 +320,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 		return span.spanData.type;
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	private getSpanKind(span: Span<any>): string {
 		switch (span.spanData.type) {
 			case "agent":
@@ -339,6 +342,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 		}
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	private getSpanStatus(span: Span<any>): SpanStatus {
 		if (span.error !== null) {
 			return {
@@ -398,11 +402,14 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 						item.callId as AttributeValue,
 					];
 				}
+				// biome-ignore lint/suspicious/noExplicitAny: Allow any
 				const output: any = item.output;
 				if (typeof output === "string") {
 					yield [`${prefix}${MESSAGE_CONTENT}`, output];
 				} else if (output && typeof output === "object") {
+					// biome-ignore lint/suspicious/noExplicitAny: Allow any
 					if (typeof (output as any).text === "string") {
+						// biome-ignore lint/suspicious/noExplicitAny: Allow any
 						yield [`${prefix}${MESSAGE_CONTENT}`, (output as any).text];
 					} else {
 						yield [`${prefix}${MESSAGE_CONTENT}`, safeSerialize(output)];
@@ -482,6 +489,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromFunctionSpanData(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Record<string, any>,
 		traceId?: string,
 	): Generator<[string, AttributeValue]> {
@@ -531,7 +539,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 			const existing = this.toolCache.get(traceId) ?? {};
 			for (const tool of obj.tools) {
 				if ("name" in tool) {
-					existing[tool.name] = tool as any;
+					existing[tool.name] = tool;
 				}
 			}
 			this.toolCache.set(traceId, existing);
@@ -545,6 +553,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 		}
 
 		yield [LLM_MODEL_NAME, obj.model];
+		// biome-ignore lint/correctness/noUnusedVariables: Allow unused variables
 		const { object, tools, usage, output, error, status, ...parameters } = obj;
 		const filteredParameters = Object.fromEntries(
 			Object.entries(parameters).filter(([_, v]) => {
@@ -570,7 +579,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 		message_index: number = 0,
 	): Generator<[string, AttributeValue]> {
 		let toolCallIndex = 0;
-		for (const [index, item] of obj.entries()) {
+		for (const [_, item] of obj.entries()) {
 			if (item.type === "message") {
 				const prefix = `${LLM_OUTPUT_MESSAGES}.${message_index}.`;
 				yield* this.getAttributesFromMessage(item, prefix);
@@ -672,6 +681,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromMCPListToolSpanData(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Record<string, any>,
 	): Generator<[string, AttributeValue]> {
 		yield [OUTPUT_VALUE, safeSerialize(obj.result)];
@@ -701,6 +711,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromGenerationSpanData(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Record<string, any>,
 	): Generator<[string, AttributeValue]> {
 		if ("model" in obj && typeof obj.model === "string") {
@@ -734,6 +745,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsInput(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Array<Record<string, any>> | null,
 	): Generator<[string, AttributeValue]> {
 		if (obj === null || obj.length === 0) {
@@ -753,6 +765,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsOutput(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Array<Record<string, any>> | null,
 	): Generator<[string, AttributeValue]> {
 		if (obj === null || obj.length === 0) {
@@ -772,6 +785,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsMessageDicts(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Array<Record<string, any>>,
 		prefix: string = "",
 		message_index: number = 0,
@@ -811,6 +825,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsMessageContent(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: string | Array<Record<string, any>> | null,
 		prefix: string = "",
 	): Generator<[string, AttributeValue]> {
@@ -833,6 +848,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsMessageContentItem(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Record<string, any>,
 		prefix: string = "",
 	): Generator<[string, AttributeValue]> {
@@ -843,6 +859,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsToolCallDict(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Record<string, any>,
 		prefix: string = "",
 	): Generator<[string, AttributeValue]> {
@@ -912,6 +929,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	}
 
 	public *getAttributesFromChatCompletionsUsage(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		obj: Record<string, any> | null,
 	): Generator<[string, AttributeValue]> {
 		if (obj === null) {
@@ -965,6 +983,7 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 	 * @returns The converted value.
 	 */
 	private convertToPrimitive(
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		value: any,
 	): boolean | string | number | Uint8Array {
 		if (

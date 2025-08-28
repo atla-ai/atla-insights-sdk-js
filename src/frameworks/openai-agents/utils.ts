@@ -8,6 +8,7 @@ export interface AttributeMapping {
  * @param value - The value to serialize.
  * @returns The serialized value.
  */
+// biome-ignore lint/suspicious/noExplicitAny: Allow any
 export function safeSerialize(value: any): string {
 	try {
 		return JSON.stringify(value, (_key, val) => {
@@ -33,14 +34,15 @@ export function safeSerialize(value: any): string {
  * @returns The extracted attributes.
  */
 export function extractAttributesFromMapping(
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	data: Record<string, any>,
 	mapping: AttributeMapping,
 ): AttributeMapping {
 	const attributes: AttributeMapping = {};
 
 	for (const [target, source] of Object.entries(mapping)) {
+		// biome-ignore lint/suspicious/noExplicitAny: Allow any
 		let value: any;
-
 		if (typeof data === "object" && data !== null && source in data) {
 			value = data[source];
 		} else {
@@ -66,6 +68,7 @@ export function extractAttributesFromMapping(
  * @returns The extracted attributes.
  */
 export function extractAttributesFromMappingWithIndex(
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	data: Record<string, any>,
 	mapping: AttributeMapping,
 	index: number,
@@ -88,6 +91,7 @@ export function extractAttributesFromMappingWithIndex(
  * @returns The extracted attributes.
  */
 export function extractAttributesFromArray(
+	// biome-ignore lint/suspicious/noExplicitAny: Allow any
 	items: Array<any>,
 	mapping: AttributeMapping,
 ): AttributeMapping {

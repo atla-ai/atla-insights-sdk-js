@@ -1,7 +1,7 @@
 import { OpenAIAgentsProcessor } from "../../../src/frameworks/openai-agents";
 import { describe, expect, test } from "@jest/globals";
-import { Responses } from "openai/resources/responses";
-import { ResponseInputItem } from "openai/resources/responses/responses";
+import type { Responses } from "openai/resources/responses";
+import type { ResponseInputItem } from "openai/resources/responses/responses";
 
 describe("OpenAIAgentsProcessor", () => {
 	it("should be defined", () => {

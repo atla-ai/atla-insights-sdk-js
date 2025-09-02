@@ -25,6 +25,9 @@ export {
 	withInstrumentedOpenAI,
 } from "./providers/openai/index";
 
+// OpenAI Agents instrumentation
+export { instrumentOpenAIAgents } from "./frameworks/openai-agents/index";
+
 // LangChain/LangGraph instrumentation
 export {
 	instrumentLangChain,

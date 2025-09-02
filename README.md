@@ -118,6 +118,7 @@ We currently support the following frameworks:
 | Framework    | Instrumentation Function  | Notes                        |
 | ------------ | ------------------------- | ---------------------------- |
 | **LangChain**   | `instrumentLangChain`        | Includes LangChain and LangGraph        |
+| **OpenAI Agents**   | `instrumentOpenAIAgents`        | |
 
 
 ⚠️ Note that, by default, instrumented LLM calls will be treated independently from one another. In order to logically group LLM calls into a trace, you will need to group them as follows:

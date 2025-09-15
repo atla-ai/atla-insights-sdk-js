@@ -154,7 +154,7 @@ export function withInstrumentedOpenAI(): { dispose(): void } {
 	try {
 		const sym = (Symbol as unknown as { dispose?: symbol }).dispose;
 		if (sym) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// biome-ignore lint/suspicious/noExplicitAny: allow external module types
 			(d as any)[sym] = d.dispose.bind(d);
 		}
 	} catch {

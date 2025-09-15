@@ -1015,8 +1015,13 @@ export class OpenAIAgentsProcessor implements TracingProcessor {
 			return value;
 		}
 
-		if (value instanceof Uint8Array || value instanceof Buffer) {
+		if (value instanceof Uint8Array) {
 			return value;
+		}
+
+		// Normalize Buffer to Uint8Array to match OpenTelemetry AttributeValue
+		if (typeof Buffer !== "undefined" && value instanceof Buffer) {
+			return new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
 		}
 
 		if (

@@ -8,7 +8,6 @@ import { trace, type Tracer } from "@opentelemetry/api";
 import {
 	SimpleSpanProcessor,
 	NodeTracerProvider,
-	type SpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 import {
 	type InstrumentationBase,
@@ -84,10 +83,6 @@ class AtlaInsights {
 		// Update the AtlaRootSpanProcessor instantiation to pass metadata
 		const atlaRootProcessor = new AtlaRootSpanProcessor(this.metadata);
 		const atlaSpanProcessor = new SimpleSpanProcessor(atlaExporter);
-		const spanProcessors: SpanProcessor[] = [
-			atlaRootProcessor,
-			atlaSpanProcessor,
-		];
 
 		// Create the tracer provider
 		this.tracerProvider = new NodeTracerProvider({
@@ -95,8 +90,12 @@ class AtlaInsights {
 			spanLimits: {
 				attributeCountLimit: DEFAULT_OTEL_ATTRIBUTE_COUNT_LIMIT,
 			},
-			spanProcessors,
 		});
+
+		// Register span processors explicitly to avoid relying on
+		// provider config fields that vary across OTel versions
+		this.tracerProvider.addSpanProcessor(atlaRootProcessor);
+		this.tracerProvider.addSpanProcessor(atlaSpanProcessor);
 
 		this.tracerProvider.register();
 		this.tracer = trace.getTracer(OTEL_MODULE_NAME);

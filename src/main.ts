@@ -94,7 +94,7 @@ class AtlaInsights {
 
 		// Register span processors explicitly to avoid relying on
 		// provider config fields that vary across OTel versions
-		this.tracerProvider.addSpanProcessor(atlaRootProcessor as any);
+		this.tracerProvider.addSpanProcessor(atlaRootProcessor);
 		this.tracerProvider.addSpanProcessor(atlaSpanProcessor);
 
 		this.tracerProvider.register();

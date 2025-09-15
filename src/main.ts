@@ -5,7 +5,10 @@
  * configure and use the Atla Insights SDK.
  */
 import { trace, type Tracer } from "@opentelemetry/api";
-import { SimpleSpanProcessor, NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
+import {
+	SimpleSpanProcessor,
+	NodeTracerProvider,
+} from "@opentelemetry/sdk-trace-node";
 import {
 	type InstrumentationBase,
 	registerInstrumentations,

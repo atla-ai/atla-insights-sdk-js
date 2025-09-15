@@ -16,7 +16,7 @@ const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 export class AtlaRootSpanProcessor implements SpanProcessor {
 	constructor(private metadata?: Record<string, string>) {}
 
-	onStart(span: Span, _: Context): void {
+	onStart(span: Span, _parentContext: Context): void {
 		this.renameInstrumentationScopeToOpenInferenceStandard(span);
 
 		if (span.parentSpanId) {
@@ -31,7 +31,7 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 		}
 	}
 
-	onEnd(_: ReadableSpan): void {
+	onEnd(_span: ReadableSpan): void {
 		// No processing needed on end
 	}
 

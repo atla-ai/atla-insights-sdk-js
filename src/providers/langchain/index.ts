@@ -146,11 +146,22 @@ export function uninstrumentLangChain(): void {
  *
  * @returns A disposable resource that cleans up LangChain instrumentation when disposed
  */
-export function withInstrumentedLangChain(): Disposable {
+export function withInstrumentedLangChain(): { dispose(): void } {
 	instrumentLangChain();
-	return {
-		[Symbol.dispose]() {
+	const d = {
+		dispose() {
 			uninstrumentLangChain();
 		},
 	};
+	// If TS 5.2+ Symbol.dispose exists at runtime, add it for ergonomics
+	try {
+		const sym = (Symbol as unknown as { dispose?: symbol }).dispose;
+		if (sym) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(d as any)[sym] = d.dispose.bind(d);
+		}
+	} catch {
+		// no-op
+	}
+	return d;
 }

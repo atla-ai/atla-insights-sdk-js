@@ -8,7 +8,7 @@ import {
 	SemanticConventions,
 } from "@arizeai/openinference-semantic-conventions";
 import { realInMemorySpanExporter } from "../setup";
-import { z } from "zod";
+import { z } from "zod/v3";
 import { ChatOpenAI } from "@langchain/openai";
 
 describe("langgraph", () => {
@@ -135,8 +135,8 @@ describe("langgraph", () => {
 		instrumentLangChain();
 
 		const search = tool(
-			async (input) => {
-				const { query } = input as { query: string };
+			async (input: { query: string}) => {
+				const { query } = input;
 				if (
 					query.toLowerCase().includes("sf") ||
 					query.toLowerCase().includes("san francisco")

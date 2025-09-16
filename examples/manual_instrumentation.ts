@@ -4,7 +4,7 @@
 import { diag, DiagConsoleLogger, DiagLogLevel, Span } from "@opentelemetry/api";
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
-import { configure, instrument, startAsCurrentSpan } from "@atla-ai/insights-sdk-js";
+import { configure, instrument, startAsCurrentSpan, AtlaSpan } from "@atla-ai/insights-sdk-js";
 
 async function main(): Promise<void> {
     configure({
@@ -19,7 +19,7 @@ async function main(): Promise<void> {
 
     const myInstrumentedFunction = instrument("My instrumented function")(
 		async (): Promise<void> => {
-			await startAsCurrentSpan("my-llm-generation", async (span: Span) => {
+			await startAsCurrentSpan("my-llm-generation", async (span: AtlaSpan) => {
                 span.recordGeneration({
                     inputMessages: [
                         { role: "system", content: "You are a helpful assistant." },

@@ -51,3 +51,20 @@ export function getGitCommitHash(): string | null {
 	}
 }
 export const currentGitCommitHash = getGitCommitHash();
+
+/**
+ * Get the current Git commit message
+ */
+export function getGitCommitMessage(): string | null {
+	try {
+		const commitMessage = execSync("git log -1 --pretty=%B", {
+			encoding: "utf8",
+			stdio: "pipe",
+		}).trim();
+
+		return commitMessage;
+	} catch {
+		return null;
+	}
+}
+export const currentGitCommitMessage = getGitCommitMessage();

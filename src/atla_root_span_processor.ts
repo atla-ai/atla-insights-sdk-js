@@ -9,6 +9,7 @@ import {
 	GIT_REPO_MARK,
 	GIT_BRANCH_MARK,
 	GIT_COMMIT_HASH_MARK,
+	GIT_COMMIT_MESSAGE_MARK,
 	METADATA_MARK,
 	SUCCESS_MARK,
 } from "./internal/constants";
@@ -16,6 +17,7 @@ import {
 	currentGitRepo,
 	currentGitBranch,
 	currentGitCommitHash,
+	currentGitCommitMessage,
 } from "./utils";
 
 const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
@@ -40,6 +42,9 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 			}
 			if (currentGitCommitHash) {
 				span.setAttribute(GIT_COMMIT_HASH_MARK, currentGitCommitHash);
+			}
+			if (currentGitCommitMessage) {
+				span.setAttribute(GIT_COMMIT_MESSAGE_MARK, currentGitCommitMessage);
 			}
 		}
 

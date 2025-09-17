@@ -1,75 +1,53 @@
 import { execSync } from "node:child_process";
-import { existsSync } from "node:fs";
 
 /**
  * Get the current Git repository name
  */
 export function getGitRepo(): string | null {
 	try {
-		if (!existsSync(".git")) {
-			return null;
-		}
+		const remoteUrl = execSync("git remote get-url origin", {
+			encoding: "utf8",
+			stdio: "pipe",
+		}).trim();
 
-		try {
-			const remoteUrl = execSync("git remote get-url origin", {
-				encoding: "utf8",
-				stdio: "pipe",
-			}).trim();
-
-			const match = remoteUrl.match(/\/([^/]+?)(?:\.git)?$/);
-			return match ? match[1] : null;
-		} catch {
-			return null;
-		}
+		const match = remoteUrl.match(/\/([^/]+?)(?:\.git)?$/);
+		return match ? match[1] : null;
 	} catch {
 		return null;
 	}
 }
+export const currentGitRepo = getGitRepo();
 
 /**
  * Get the current Git branch name
  */
 export function getGitBranch(): string | null {
 	try {
-		if (!existsSync(".git")) {
-			return null;
-		}
+		const headRef = execSync("git symbolic-ref HEAD", {
+			encoding: "utf8",
+			stdio: "pipe",
+		}).trim();
 
-		try {
-			const headRef = execSync("git symbolic-ref HEAD", {
-				encoding: "utf8",
-				stdio: "pipe",
-			}).trim();
-
-			return headRef.replace("refs/heads/", "");
-		} catch {
-			return null;
-		}
+		return headRef.replace("refs/heads/", "");
 	} catch {
 		return null;
 	}
 }
+export const currentGitBranch = getGitBranch();
 
 /**
  * Get the current Git commit hash
  */
 export function getGitCommitHash(): string | null {
 	try {
-		if (!existsSync(".git")) {
-			return null;
-		}
+		const commitHash = execSync("git rev-parse HEAD", {
+			encoding: "utf8",
+			stdio: "pipe",
+		}).trim();
 
-		try {
-			const commitHash = execSync("git rev-parse HEAD", {
-				encoding: "utf8",
-				stdio: "pipe",
-			}).trim();
-
-			return commitHash;
-		} catch {
-			return null;
-		}
+		return commitHash;
 	} catch {
 		return null;
 	}
 }
+export const currentGitCommitHash = getGitCommitHash();

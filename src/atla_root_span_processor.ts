@@ -12,7 +12,7 @@ import {
 	METADATA_MARK,
 	SUCCESS_MARK,
 } from "./internal/constants";
-import { getGitRepo, getGitBranch, getGitCommitHash } from "./utils";
+import { currentGitRepo, currentGitBranch, currentGitCommitHash } from "./utils";
 
 const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 	"@arizeai/openinference-instrumentation-openai":
@@ -28,17 +28,14 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 		this.renameInstrumentationScopeToOpenInferenceStandard(span);
 
 		if (!process.env[GIT_TRACKING_DISABLED_ENV_VAR]) {
-			const repo = getGitRepo();
-			if (repo) {
-				span.setAttribute(GIT_REPO_MARK, repo);
+			if (currentGitRepo) {
+				span.setAttribute(GIT_REPO_MARK, currentGitRepo);
 			}
-			const branch = getGitBranch();
-			if (branch) {
-				span.setAttribute(GIT_BRANCH_MARK, branch);
+			if (currentGitBranch) {
+				span.setAttribute(GIT_BRANCH_MARK, currentGitBranch);
 			}
-			const commitHash = getGitCommitHash();
-			if (commitHash) {
-				span.setAttribute(GIT_COMMIT_HASH_MARK, commitHash);
+			if (currentGitCommitHash) {
+				span.setAttribute(GIT_COMMIT_HASH_MARK, currentGitCommitHash);
 			}
 		}
 

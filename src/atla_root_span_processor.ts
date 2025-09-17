@@ -4,7 +4,15 @@ import type {
 	SpanProcessor,
 } from "@opentelemetry/sdk-trace-base";
 import type { Context } from "@opentelemetry/api";
-import { METADATA_MARK, SUCCESS_MARK } from "./internal/constants";
+import {
+	GIT_TRACKING_DISABLED_ENV_VAR,
+	GIT_REPO_MARK,
+	GIT_BRANCH_MARK,
+	GIT_COMMIT_HASH_MARK,
+	METADATA_MARK,
+	SUCCESS_MARK,
+} from "./internal/constants";
+import { getGitRepo, getGitBranch, getGitCommitHash } from "./utils";
 
 const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 	"@arizeai/openinference-instrumentation-openai":
@@ -18,6 +26,21 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 
 	onStart(span: Span, _parentContext: Context): void {
 		this.renameInstrumentationScopeToOpenInferenceStandard(span);
+
+		if (!process.env[GIT_TRACKING_DISABLED_ENV_VAR]) {
+			const repo = getGitRepo();
+			if (repo) {
+				span.setAttribute(GIT_REPO_MARK, repo);
+			}
+			const branch = getGitBranch();
+			if (branch) {
+				span.setAttribute(GIT_BRANCH_MARK, branch);
+			}
+			const commitHash = getGitCommitHash();
+			if (commitHash) {
+				span.setAttribute(GIT_COMMIT_HASH_MARK, commitHash);
+			}
+		}
 
 		if (span.parentSpanId) {
 			return;

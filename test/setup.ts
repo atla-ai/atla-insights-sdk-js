@@ -4,13 +4,13 @@ import type { ReadableSpan } from "@opentelemetry/sdk-trace-base";
 import { InMemorySpanExporter } from "@opentelemetry/sdk-trace-base";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
-import { resourceFromAttributes } from "@opentelemetry/resources";
+import { Resource } from "@opentelemetry/resources";
 import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 
 // Real in-memory exporter + provider for tests
 export const realInMemorySpanExporter = new InMemorySpanExporter();
 const realTracerProvider = new NodeTracerProvider({
-	resource: resourceFromAttributes({
+	resource: new Resource({
 		[ATTR_SERVICE_NAME]: "test-service",
 	}),
 	spanProcessors: [new SimpleSpanProcessor(realInMemorySpanExporter)],

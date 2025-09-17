@@ -13,10 +13,7 @@ import {
 	type InstrumentationBase,
 	registerInstrumentations,
 } from "@opentelemetry/instrumentation";
-import {
-	defaultResource,
-	resourceFromAttributes,
-} from "@opentelemetry/resources";
+import { Resource } from "@opentelemetry/resources";
 import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 import {
 	DEFAULT_OTEL_ATTRIBUTE_COUNT_LIMIT,
@@ -66,8 +63,8 @@ class AtlaInsights {
 		}
 
 		// Create resource
-		const resource = defaultResource().merge(
-			resourceFromAttributes({
+		const resource = Resource.default().merge(
+			new Resource({
 				[ATTR_SERVICE_NAME]: serviceName,
 			}),
 		);

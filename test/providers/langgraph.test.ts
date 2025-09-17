@@ -135,7 +135,7 @@ describe("langgraph", () => {
 		instrumentLangChain();
 
 		const search = tool(
-			async (input: { query: string}) => {
+			async (input: { query: string }) => {
 				const { query } = input;
 				if (
 					query.toLowerCase().includes("sf") ||

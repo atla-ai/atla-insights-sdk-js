@@ -12,7 +12,11 @@ import {
 	METADATA_MARK,
 	SUCCESS_MARK,
 } from "./internal/constants";
-import { currentGitRepo, currentGitBranch, currentGitCommitHash } from "./utils";
+import {
+	currentGitRepo,
+	currentGitBranch,
+	currentGitCommitHash,
+} from "./utils";
 
 const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 	"@arizeai/openinference-instrumentation-openai":

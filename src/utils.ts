@@ -16,7 +16,7 @@ export function getGitRepo(): string | null {
 				stdio: "pipe",
 			}).trim();
 
-			const match = remoteUrl.match(/\/([^\/]+?)(?:\.git)?$/);
+			const match = remoteUrl.match(/\/([^/]+?)(?:\.git)?$/);
 			return match ? match[1] : null;
 		} catch {
 			return null;

@@ -8,7 +8,9 @@ export function getGitRepo(): string | null {
 		const remoteUrl = execSync("git remote get-url origin", {
 			encoding: "utf8",
 			stdio: "pipe",
-		}).trim().replace(/\.git$/, "");
+		})
+			.trim()
+			.replace(/\.git$/, "");
 		return remoteUrl;
 	} catch {
 		return null;

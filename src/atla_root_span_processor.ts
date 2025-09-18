@@ -4,7 +4,25 @@ import type {
 	SpanProcessor,
 } from "@opentelemetry/sdk-trace-base";
 import type { Context } from "@opentelemetry/api";
-import { METADATA_MARK, SUCCESS_MARK } from "./internal/constants";
+import {
+	GIT_TRACKING_DISABLED_ENV_VAR,
+	GIT_REPO_MARK,
+	GIT_BRANCH_MARK,
+	GIT_COMMIT_HASH_MARK,
+	GIT_COMMIT_MESSAGE_MARK,
+	GIT_COMMIT_TIMESTAMP_MARK,
+	GIT_SEMVER_MARK,
+	METADATA_MARK,
+	SUCCESS_MARK,
+} from "./internal/constants";
+import {
+	currentGitRepo,
+	currentGitBranch,
+	currentGitCommitHash,
+	currentGitCommitMessage,
+	currentGitSemver,
+	currentGitCommitTimestamp,
+} from "./utils";
 
 const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 	"@arizeai/openinference-instrumentation-openai":
@@ -18,6 +36,27 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 
 	onStart(span: Span, _parentContext: Context): void {
 		this.renameInstrumentationScopeToOpenInferenceStandard(span);
+
+		if (!process.env[GIT_TRACKING_DISABLED_ENV_VAR]) {
+			if (currentGitRepo) {
+				span.setAttribute(GIT_REPO_MARK, currentGitRepo);
+			}
+			if (currentGitBranch) {
+				span.setAttribute(GIT_BRANCH_MARK, currentGitBranch);
+			}
+			if (currentGitCommitHash) {
+				span.setAttribute(GIT_COMMIT_HASH_MARK, currentGitCommitHash);
+			}
+			if (currentGitCommitMessage) {
+				span.setAttribute(GIT_COMMIT_MESSAGE_MARK, currentGitCommitMessage);
+			}
+			if (currentGitCommitTimestamp) {
+				span.setAttribute(GIT_COMMIT_TIMESTAMP_MARK, currentGitCommitTimestamp);
+			}
+			if (currentGitSemver) {
+				span.setAttribute(GIT_SEMVER_MARK, currentGitSemver);
+			}
+		}
 
 		if (span.parentSpanId) {
 			return;

@@ -1,17 +1,15 @@
 import { execSync } from "node:child_process";
 
 /**
- * Get the current Git repository name
+ * Get the current Git remote repository URL
  */
 export function getGitRepo(): string | null {
 	try {
 		const remoteUrl = execSync("git remote get-url origin", {
 			encoding: "utf8",
 			stdio: "pipe",
-		}).trim();
-
-		const match = remoteUrl.match(/\/([^/]+?)(?:\.git)?$/);
-		return match ? match[1] : null;
+		}).trim().replace(/\.git$/, "");
+		return remoteUrl;
 	} catch {
 		return null;
 	}
@@ -68,3 +66,37 @@ export function getGitCommitMessage(): string | null {
 	}
 }
 export const currentGitCommitMessage = getGitCommitMessage();
+
+/**
+ * Get the current Git commit timestamp
+ */
+export function getGitCommitTimestamp(): string | null {
+	try {
+		const commitMessage = execSync("git show -s --format=%cI HEAD", {
+			encoding: "utf8",
+			stdio: "pipe",
+		}).trim();
+
+		return commitMessage;
+	} catch {
+		return null;
+	}
+}
+export const currentGitCommitTimestamp = getGitCommitTimestamp();
+
+/**
+ * Get the current Git semver
+ */
+export function getGitSemver(): string | null {
+	try {
+		const commitMessage = execSync("git describe --tags --abbrev=0", {
+			encoding: "utf8",
+			stdio: "pipe",
+		}).trim();
+
+		return commitMessage;
+	} catch {
+		return null;
+	}
+}
+export const currentGitSemver = getGitSemver();

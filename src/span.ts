@@ -180,7 +180,13 @@ export async function startAsCurrentSpan<T>(
 	name: string,
 	fn: (span: AtlaSpan) => T | Promise<T>,
 ): Promise<T> {
-	const tracer = ATLA_INSIGHTS.getTracer();
+	const tracerProvider = ATLA_INSIGHTS.getTracerProvider();
+	if (!tracerProvider) {
+		throw new Error("Atla Insights must be configured before use.");
+	}
+	const tracer = tracerProvider.getTracer(
+		"openinference.instrumentation.manual",
+	);
 
 	return tracer.startActiveSpan(
 		name,

@@ -1,6 +1,6 @@
 {
   "name": "@atla-ai/insights-sdk-js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "JavaScript SDK for Atla Insights platform",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

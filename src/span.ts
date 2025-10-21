@@ -184,7 +184,9 @@ export async function startAsCurrentSpan<T>(
 	if (!tracerProvider) {
 		throw new Error("Atla Insights must be configured before use.");
 	}
-	const tracer = tracerProvider.getTracer("openinference.instrumentation.manual");
+	const tracer = tracerProvider.getTracer(
+		"openinference.instrumentation.manual",
+	);
 
 	return tracer.startActiveSpan(
 		name,

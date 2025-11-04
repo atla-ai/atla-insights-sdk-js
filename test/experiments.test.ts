@@ -17,9 +17,7 @@ describe("experiments", () => {
 
 	beforeEach(() => {
 		consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-		consoleErrorSpy = jest
-			.spyOn(console, "error")
-			.mockImplementation(() => {});
+		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 	});
 
 	afterEach(() => {
@@ -78,7 +76,8 @@ describe("experiments", () => {
 			// Check that console.log was called with auto-generated name
 			const logCalls = consoleLogSpy.mock.calls;
 			const startCall = logCalls.find(
-				(call) => call[0] && call[0].toString().includes("Starting experiment:"),
+				(call) =>
+					call[0] && call[0].toString().includes("Starting experiment:"),
 			);
 			expect(startCall).toBeDefined();
 
@@ -107,7 +106,9 @@ describe("experiments", () => {
 
 			expect(capturedExperiment).toBeDefined();
 			expect(capturedExperiment?.name).toBe("desc-test");
-			expect(capturedExperiment?.description).toBe("Testing description feature");
+			expect(capturedExperiment?.description).toBe(
+				"Testing description feature",
+			);
 		});
 
 		it("should not include description if not provided", () => {

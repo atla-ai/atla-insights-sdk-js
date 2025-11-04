@@ -6,6 +6,8 @@ export const DEFAULT_SERVICE_NAME = "atla-insights-js";
 
 export const METADATA_MARK = "atla.metadata";
 export const SUCCESS_MARK = "atla.mark.success";
+export const ENVIRONMENT_MARK = "atla.environment";
+export const EXPERIMENT_NAMESPACE = "atla.experiment";
 
 export const GIT_BRANCH_MARK = "atla.git.branch";
 export const GIT_COMMIT_HASH_MARK = "atla.git.commit.hash";

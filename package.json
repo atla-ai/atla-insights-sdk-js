@@ -1,6 +1,6 @@
 {
   "name": "@atla-ai/insights-sdk-js",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "JavaScript SDK for Atla Insights platform",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,6 +28,7 @@
     "@langchain/langgraph": "^0.4.5",
     "@langchain/openai": "^0.6.9",
     "@openai/agents": "^0.0.17",
+    "human-id": "^4.1.2",
     "ts-node": "^10.9.2",
     "zod": "^3.25.40"
   },

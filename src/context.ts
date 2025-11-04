@@ -11,10 +11,12 @@ import {
 	type Context,
 	type Span,
 } from "@opentelemetry/api";
+import type { Experiment } from "./experiments";
 
 interface AtlaContext {
 	rootSpan?: Span;
 	suppressInstrumentation?: boolean;
+	experiment?: Experiment;
 }
 
 // Store Atla-specific context that isn't part of OpenInference

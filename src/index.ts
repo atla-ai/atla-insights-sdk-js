@@ -18,6 +18,9 @@ export {
 // Marking functionality
 export { markSuccess, markFailure } from "./marking";
 
+// Experiments
+export { runExperiment, type Experiment } from "./experiments";
+
 // LLM provider instrumentation
 export {
 	instrumentOpenAI,

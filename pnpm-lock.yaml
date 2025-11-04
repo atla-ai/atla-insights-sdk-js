@@ -56,6 +56,9 @@ importers:
       '@opentelemetry/semantic-conventions':
         specifier: '>=1.30.0 <2'
         version: 1.36.0
+      human-id:
+        specifier: ^4.1.2
+        version: 4.1.2
       openai:
         specifier: ^4.62.1 || ^5.12.2
         version: 5.12.2(ws@8.18.3)(zod@3.25.76)
@@ -2531,6 +2534,10 @@ packages:
   https-proxy-agent@7.0.6:
     resolution: {integrity: sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==}
     engines: {node: '>= 14'}
+
+  human-id@4.1.2:
+    resolution: {integrity: sha512-v/J+4Z/1eIJovEBdlV5TYj1IR+ZiohcYGRY+qN/oC9dAfKzVT023N/Bgw37hrKCoVRBvk3bqyzpr2PP5YeTMSg==}
+    hasBin: true
 
   human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
@@ -6197,6 +6204,8 @@ snapshots:
       debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
+
+  human-id@4.1.2: {}
 
   human-signals@2.1.0: {}
 

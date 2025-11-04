@@ -269,6 +269,65 @@ const runMyAgent = instrument("My agent doing its thing")(
 
 ⚠️ Note that you should use this marking functionality within an instrumented function.
 
+### Experiments
+
+You can group related traces into experiments for comparative analysis in the Atla Insights workbench. This is particularly useful when testing different prompts, models, or configurations.
+
+```typescript
+import {
+  configure,
+  instrument,
+  instrumentOpenAI,
+  runExperiment,
+} from "@atla-ai/insights-sdk-js";
+import OpenAI from "openai";
+
+configure({ token: "..." });
+instrumentOpenAI();
+
+const client = new OpenAI();
+
+// Run code within an experiment context
+await runExperiment(
+	{
+		experimentName: "my-experiment",
+		description: "Testing out some experiment changes",
+	},
+	async () => {
+		// Generate traces within this experiment
+		const runMyExperimentTrace = instrument("my-trace")(async () => {
+			const completion = await client.chat.completions.create({
+				model: "gpt-4o",
+				messages: [
+					{
+						role: "user",
+						content: "Hello world!",
+					},
+				],
+			});
+
+			console.log("Response:", completion.choices[0].message.content);
+		});
+
+		await runMyExperimentTrace();
+	},
+);
+```
+
+If you don't provide an experiment name, one will be auto-generated for you:
+
+```typescript
+// Auto-generated name like "clever-fox-a3b4c5d6"
+await runExperiment({}, async () => {
+  // Your experiment code
+});
+```
+
+All traces generated within an experiment will:
+- Be tagged with the experiment name and description
+- Appear in the "dev" environment in your dashboard
+- Be grouped together in the Atla Insights workbench for easy comparison
+
 ### Compatibility with existing observability
 
 As `@atla-ai/insights-sdk-js` provides its own instrumentation, we should note potential interactions with our instrumentation / observability providers.

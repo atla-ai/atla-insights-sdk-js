@@ -86,7 +86,9 @@ describe("experiments", () => {
 				.replace("🧪 Starting experiment: ", "");
 
 			// Should match pattern: adjective-adjective-noun-verb-uuid (human-id format)
-			expect(experimentName).toMatch(/^[a-z]+-[a-z]+-[a-z]+-[a-z]+-[a-f0-9]{8}$/);
+			expect(experimentName).toMatch(
+				/^[a-z]+-[a-z]+-[a-z]+-[a-z]+-[a-f0-9]{8}$/,
+			);
 		});
 
 		it("should include description in experiment context", () => {
@@ -268,7 +270,9 @@ describe("experiments", () => {
 
 			expect(experimentName).toBeDefined();
 			// Format: adjective-adjective-noun-verb-8hexchars (human-id format)
-			expect(experimentName).toMatch(/^[a-z]+-[a-z]+-[a-z]+-[a-z]+-[a-f0-9]{8}$/);
+			expect(experimentName).toMatch(
+				/^[a-z]+-[a-z]+-[a-z]+-[a-z]+-[a-f0-9]{8}$/,
+			);
 		});
 	});
 });

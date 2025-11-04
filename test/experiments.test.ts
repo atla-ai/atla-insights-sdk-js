@@ -85,8 +85,8 @@ describe("experiments", () => {
 				.toString()
 				.replace("🧪 Starting experiment: ", "");
 
-			// Should match pattern: adjective-noun-uuid
-			expect(experimentName).toMatch(/^[a-z]+-[a-z]+-[a-f0-9]{8}$/);
+			// Should match pattern: adjective-adjective-noun-verb-uuid (human-id format)
+			expect(experimentName).toMatch(/^[a-z]+-[a-z]+-[a-z]+-[a-z]+-[a-f0-9]{8}$/);
 		});
 
 		it("should include description in experiment context", () => {
@@ -267,8 +267,8 @@ describe("experiments", () => {
 			});
 
 			expect(experimentName).toBeDefined();
-			// Format: adjective-noun-8hexchars
-			expect(experimentName).toMatch(/^[a-z]+-[a-z]+-[a-f0-9]{8}$/);
+			// Format: adjective-adjective-noun-verb-8hexchars (human-id format)
+			expect(experimentName).toMatch(/^[a-z]+-[a-z]+-[a-z]+-[a-z]+-[a-f0-9]{8}$/);
 		});
 	});
 });

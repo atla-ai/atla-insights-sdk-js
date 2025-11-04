@@ -76,8 +76,7 @@ describe("experiments", () => {
 			// Check that console.log was called with auto-generated name
 			const logCalls = consoleLogSpy.mock.calls;
 			const startCall = logCalls.find(
-				(call) =>
-					call[0] && call[0].toString().includes("Starting experiment:"),
+				(call) => call[0]?.toString().includes("Starting experiment:"),
 			);
 			expect(startCall).toBeDefined();
 

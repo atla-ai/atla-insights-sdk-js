@@ -14,6 +14,8 @@ import {
 	GIT_SEMVER_MARK,
 	METADATA_MARK,
 	SUCCESS_MARK,
+	ENVIRONMENT_MARK,
+	EXPERIMENT_NAMESPACE,
 } from "./internal/constants";
 import {
 	currentGitRepo,
@@ -23,6 +25,7 @@ import {
 	currentGitSemver,
 	currentGitCommitTimestamp,
 } from "./utils";
+import { getAtlaContext } from "./context";
 
 const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 	"@arizeai/openinference-instrumentation-openai":
@@ -34,7 +37,7 @@ const INSTRUMENTATION_SCOPE_MAPPINGS: Record<string, string> = {
 export class AtlaRootSpanProcessor implements SpanProcessor {
 	constructor(private metadata?: Record<string, string>) {}
 
-	onStart(span: Span, _parentContext: Context): void {
+	onStart(span: Span, parentContext: Context): void {
 		this.renameInstrumentationScopeToOpenInferenceStandard(span);
 
 		if (!process.env[GIT_TRACKING_DISABLED_ENV_VAR]) {
@@ -64,6 +67,26 @@ export class AtlaRootSpanProcessor implements SpanProcessor {
 
 		// This is a root span
 		span.setAttribute(SUCCESS_MARK, -1);
+
+		// Handle experiments
+		const atlaContext = getAtlaContext(parentContext);
+		if (atlaContext?.experiment) {
+			// Force environment to "dev" for experiments
+			span.setAttribute(ENVIRONMENT_MARK, "dev");
+
+			// Add experiment attributes
+			span.setAttribute(
+				`${EXPERIMENT_NAMESPACE}.name`,
+				atlaContext.experiment.name,
+			);
+
+			if (atlaContext.experiment.description) {
+				span.setAttribute(
+					`${EXPERIMENT_NAMESPACE}.description`,
+					atlaContext.experiment.description,
+				);
+			}
+		}
 
 		if (this.metadata && Object.keys(this.metadata).length > 0) {
 			span.setAttribute(METADATA_MARK, JSON.stringify(this.metadata));
